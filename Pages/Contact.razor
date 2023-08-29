@@ -1,0 +1,189 @@
+﻿@page "/contact"
+@inject NavigationManager navigationManager
+
+<section>
+    <Banner slides="slides" sliderAnimation="@sliderAnimation" />
+</section>
+<section id="contact" class="contact">
+    <div class="row">
+        <div class="desc">
+            <h3>Peter's Soft Network (PSN)</h3>
+            <p>
+                In the rapidly evolving landscape of technology and business, Peter's Soft
+                Network emerges as a dynamic start-up company set to make a profound impact
+                across multiple sectors. With a vision to bridge the gap between Technology, Education, Agriculture,
+                Commerce, Transportation, Entertainment, Food Processing, and Music, Peter's
+                Soft Network aims to create robust networks of individuals and resources while developing
+                functional and scalable software applications.
+                At the core of Peter's Soft Network's mission is the belief that technology has the power to
+                transform industries and drive progress in society. By leveraging cutting-edge software solutions,
+                the company aims to empower businesses and individuals alike, facilitating seamless collaboration,
+                streamlining processes, and unlocking new opportunities for growth and innovation.
+            </p>
+            <div class="info">
+                <i class="fab fa-whatsapp icon"></i>
+                <div>
+                    <i>Whatsapp</i>
+                    <h5>08181734574</h5>
+                </div>
+            </div>
+            <div class="info">
+                <i class="fas fa-phone icon"></i>
+                <div>
+                    <i>Mobile</i>
+                    <h5>08181734574</h5>
+                </div>
+            </div>
+            <div class="info">
+                <i class="fas fa-envelope icon"></i>
+                <div>
+                    <i>Email</i>
+                    <h5>peters.soft.network@gmail.com</h5>
+                </div>
+            </div>
+            <div class="info">
+                <i class="fas fa-map-marker icon"></i>
+                <div>
+                    <i>Address</i>
+                    <h5>Ogbanga estate, Trans Amadi, PH City.</h5>
+                </div>
+            </div>
+
+        </div>
+        <div class="inputs">
+            <h3>Get in touch</h3>
+            <span class="msg @msgClass">@message</span>
+            <input @bind="name" placeholder="Enter full name *" type="text" class="input-name">
+            <input @onfocusout="(()=>IsEmailValid(email))" @bind="email" placeholder="Enter valid email address *" type="email" class="input-name">
+            <input  @onfocusout="(()=>IsMobileValid(mobile))" @bind="mobile" placeholder="Enter mobile number *" type="text" class="input-name">
+            <input @bind="title" placeholder="Subject *" type="text" class="input-name">
+            <textarea @bind="body" class="textarea" placeholder="Type your comment"></textarea>
+            <button @onclick="SendMail" class="main-btn">Submit</button>
+        </div>
+    </div>
+</section>
+
+@code {
+    public string sliderAnimation { get; set; } = "fade-in";
+    string name = "";
+    string email = "";
+    string mobile = "";
+    private string title = "";
+    private string body = "";
+    string message = "";
+    string msgClass = "";
+    bool isMobileValid;
+    bool isEmailValid;
+    string domainName = "";
+    protected override void OnInitialized()
+    {
+        var uri = new Uri(navigationManager.Uri);
+        domainName = uri.Host;
+    }
+    private List<Slides> slides = new List<Slides>
+    {
+        new Slides {
+            IsActive = true,
+            Header = "Call us: 08181734574",
+            ImagePath = "./images/contact/call.jpg"
+        },
+        new Slides {
+            IsActive = false,
+            Header = "Send a dm : 08181734574",
+            ImagePath = "./images/contact/what1.jpg" },
+        new Slides {
+            IsActive = false,
+            Header = "Tweet us : @psn",
+            ImagePath = "./images/contact/tweet.jpg" },
+        new Slides {
+            IsActive = false,
+            Header = "We are active on Fb : @Peter's Soft Network",
+            ImagePath = "./images/contact/fb2.jpg" },
+            new Slides {
+            IsActive = false,
+            Header = "We are active on Instagram @petersoftnetwork",
+            ImagePath = "./images/contact/insta1.jpg" },
+    };
+    private async void SendMail()
+    {
+        if (!string.IsNullOrWhiteSpace(title) || !string.IsNullOrWhiteSpace(body))
+        {
+            if (IsEmailValid(email) && IsMobileValid(mobile))
+            {
+                message = "sending mail ... please wait";
+                msgClass = "red";
+                body = $"A user with name {name} and email address {email} sent a mail from <a href=\"https://{domainName}\">{domainName}</a>. Read below ... \n {body}";
+                var isSent = await MailService.Send("peters.soft.network@gmail.com", "flexyvic12@gmail.com", title, body);
+                if (isSent)
+                {
+                    message = "your mail delivered safely";
+                    msgClass = "green";
+                    email = string.Empty;
+                    mobile = string.Empty;
+                    name = string.Empty;
+                    body = string.Empty;
+                    title = string.Empty;
+                }
+                else
+                {
+                    message = "An error occured! mail sending failed";
+                    msgClass = "red";
+                    body = string.Empty;
+                    title = string.Empty;
+                }
+            }
+        }
+        else
+        {
+            msgClass = "red";
+            message = "The subject and body fields must not be empty";
+        }
+    }
+    private bool IsEmailValid(string email)
+    {
+        string pattern = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
+        Regex regex = new Regex(pattern);
+        isEmailValid = regex.IsMatch(email);
+        if (isEmailValid)
+        {
+            message = "email is valid";
+            msgClass = "green";
+        }
+        else
+        {
+            message = "email field is invalid, email must be in the form abc@xyz.com";
+            msgClass = "red";
+        }
+        return isEmailValid;
+    }
+    private bool IsMobileValid(string mobile)
+    {
+        if (!string.IsNullOrEmpty(mobile))
+        {
+            string pattern = @"^(?:\+?\d{1,3})?(?:0|\d{1,4})\d{10}$";
+            Regex regex = new Regex(pattern);
+            if (mobile.Contains("+") || (!mobile.Contains("+") && mobile.Length == 11 && mobile.StartsWith("0")))
+            {
+                isMobileValid = regex.IsMatch(mobile);
+                if (!isMobileValid)
+                {
+                    message = "Mobile must have max of 14 characters \n" +
+                        "It may include '+' sign, country code and mobile digits";
+                    msgClass = "red";
+                }
+                else
+                {
+                    message = "Mobile number is valid";
+                    msgClass = "green";
+                }
+            }
+            else
+            {
+                message = "Mobile number is not in a correct format";
+                msgClass = "red";
+            }
+        }
+        return isMobileValid;
+    }
+}
+

@@ -1,0 +1,204 @@
+﻿@page "/blog"
+@inject NavigationManager navigationManager
+@implements IDisposable
+@inject IStore Store
+
+<section id="blog" class="blog-wrapper pb-0">
+    @if (blogList.Count == 0)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center mb-5">
+                    <h6>Let's keep you updated via our blog</h6>
+                    <h3>Our Blog</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card p-0 border-0 rounded-0">
+                        <div class="blog-img">
+                            <img src="./images/blog/blog1.webp" alt="blog">
+                        </div>
+                        <div class="blog-content bg-white p-4">
+                            <h5 class="text-decoration-underline mb-4">Realm of Indulgence</h5>
+                            <h6>By Admin - February 18, 2023</h6>
+                            <p class="mt-2">
+                                Discover a realm of refined indulgence where every moment is designed to
+                                evoke a sense of awe and wonder. Immerse yourself in a world of elegance,
+                                opulence, and glamour that will leave an everlasting impression, ensuring
+                                your stay is nothing short of extraordinary.
+                            </p>
+                            <a class="main-btn mt-2">Read</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card p-0 border-0 rounded-0">
+                        <div class="blog-img">
+                            <img src="./images/blog/room3.webp" alt="blog">
+                        </div>
+                        <div class="blog-content bg-white p-4">
+                            <h5 class="text-decoration-underline mb-4">Realm of Indulgence</h5>
+                            <h6>By Admin - February 18, 2023</h6>
+                            <p class="mt-2">
+                                Discover a realm of refined indulgence where every moment is designed to
+                                evoke a sense of awe and wonder. Immerse yourself in a world of elegance,
+                                opulence, and glamour that will leave an everlasting impression, ensuring
+                                your stay is nothing short of extraordinary.
+                            </p>
+                            <a class="main-btn mt-2">Read</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card p-0 border-0 rounded-0">
+                        <div class="blog-img">
+                            <img src="./images/blog/blog2.webp" alt="blog">
+                        </div>
+                        <div class="blog-content bg-white p-4">
+                            <h5 class="text-decoration-underline mb-4">Realm of Indulgence</h5>
+                            <h6>By Admin - February 18, 2023</h6>
+                            <p class="mt-2">
+                                Discover a realm of refined indulgence where every moment is designed to
+                                evoke a sense of awe and wonder. Immerse yourself in a world of elegance,
+                                opulence, and glamour that will leave an everlasting impression, ensuring
+                                your stay is nothing short of extraordinary.
+                            </p>
+                            <a class="main-btn mt-2">Read</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card p-0 border-0 rounded-0">
+                        <div class="blog-img">
+                            <img src="./images/blog/mky-moody-AUF6Gl4wwzA-unsplash.jpg" alt="blog">
+                        </div>
+                        <div class="blog-content bg-white p-4">
+                            <h5 class="text-decoration-underline mb-4">Luxury at it's peak</h5>
+                            <h6>By Admin - February 18, 2023</h6>
+                            <p class="mt-2">
+                                From grand suites that redefine luxury to intimate rooms
+                                that cocoon you in comfort, our hotel rooms embody the essence of elegance, opulence,
+                                and glamour. Whether you're seeking a romantic getaway, a memorable escape,
+                                or a sanctuary for relaxation, our rooms offer an unparalleled retreat.
+
+                            </p>
+                            <a class="main-btn mt-2">Read</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 section-title text-center mb-5">
+                    <h6>Let's keep you updated via our blog</h6>
+                    <h3>Blog Posts</h3>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var blog in blogList)
+                {
+                    string link = $"/blog-post/{blog.Id}";
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-0 border-0 rounded-0">
+                            <div class="blog-img">
+                                <img src="@blog.ImagePath" alt="blog">
+                            </div>
+                            <div class="blog-content bg-white p-4">
+                                <h5 class="text-decoration-underline mb-4">@blog.Title</h5>
+                                <h6>By Admin - @blog.Date.ToString("MMMM d, yyyy hh:mm tt")</h6>
+                                @if (Store.State().Admin.IsAdmin)
+                                {
+                                    <div class="admin">
+                                        <i @onclick="(() => {deleteId = blog.Id; deleteName = blog.Title; showDialog = true;})" class="fas fa-trash"></i>
+                                        <i @onclick="(() =>{Edit(blog);})" class="fas fa-edit"></i>
+                                    </div>
+                                }
+                                <p class="mt-2">
+                                    @blog.Description
+                                </p>
+                                <a href="@link" class="main-btn mt-2">Read</a>
+                            </div>
+                        </div>
+                    </div>
+                    count++;
+                    if (Limit == count)
+                    {
+                        break;
+                    }
+                }
+            </div>
+        </div>
+    }
+</section>
+@if (showDialog)
+{
+    <section class="dialog">
+        <div class="container">
+            <span @onclick="CloseDialog" class="close">x</span>
+            <span>Do you want to delete @deleteName permanently?</span>
+            <button @onclick="(() => Delete(deleteId))" class="main-btn">Confirm Delete</button>
+        </div>
+    </section>
+}
+
+@code {
+    [Inject]
+    private IWebHostEnvironment? _environment { get; set; }
+    private List<Blogs> blogList = new();
+    [Parameter]
+    public int Limit { get; set; }
+    public int count { get; set; } = 0;
+    private bool showDialog = false;
+    private string deleteName = "";
+    private string deleteId = "";
+    protected override void OnInitialized()
+    {
+        blogList = database.ReadAll<string, Blogs>("Blogs").Values.OrderByDescending(x => x.Date).ToList();
+    }
+    private void CloseDialog()
+    {
+        showDialog = false;
+        deleteId = string.Empty;
+        deleteName = string.Empty;
+    }
+    private void Delete(string id)
+    {
+        if (!string.IsNullOrEmpty(id))
+        {
+            var isDel = database.Delete("Blogs", id);//bc.Delete(id);
+            if (isDel)
+            {
+                var b = blogList.Find(x => x.Id == id);
+                DeleteImage(b?.ImagePath ?? "");
+                blogList.Remove(b ?? new());
+                CloseDialog();
+            }
+        }
+    }
+    private void Edit(Blogs blog)
+    {
+        Store.SetEditValue(1, JsonConvert.SerializeObject(blog));
+        navigationManager.NavigateTo("/admin");
+    }
+    public void Dispose()
+    {
+        Store.RemoveStateChangedAction(() => { StateHasChanged(); });
+    }
+    public void DeleteImage(string filePath)
+    {
+        if (_environment != null)
+        {
+            string imagePath = Path.Combine(_environment.WebRootPath, filePath);
+
+            if (File.Exists(imagePath))
+            {
+                File.Delete(imagePath);
+            }
+        }
+    }
+}

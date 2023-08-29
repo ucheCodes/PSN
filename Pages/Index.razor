@@ -1,0 +1,44 @@
+﻿@page "/"
+
+<Banner sliderAnimation="@animation" slides="slides"/>
+<div class="blog-home">
+    <Blog Limit="2" />
+</div>
+<Services/>
+<Project/>
+@*<Team/>*@
+
+@code{
+    public string animation { get; set; } = "zoom-in";
+    private List<Slides> slides = new List<Slides>()
+    {
+        new Slides()
+        {
+            ImagePath = "./images/comp2.jpg",
+            Header = "Peter's Soft Network",
+            IsActive = true
+        },
+        new Slides()
+        {
+            ImagePath = "./images/comp3.jpg",
+            Header = "Revolutionizing Multiple Industries",
+            IsActive = false
+        },
+        new Slides()
+        {
+            ImagePath = "./images/bg1.jpg",
+            Header = "Through Innovative Software Solutions",
+            IsActive = false
+        },
+        new Slides()
+        {
+            ImagePath = "./images/bg2.jpg",
+            Header = "Networking Humans and Resources to Achieve a Common Goal.",
+            IsActive = false
+        },
+    };
+     /*
+     *Fix bug in blog upload
+     *Fix maximum file size error
+     */
+}

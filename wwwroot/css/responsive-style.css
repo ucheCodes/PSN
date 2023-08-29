@@ -1,0 +1,286 @@
+@media (max-width: 1199px) {
+    .header-wrapper .navbar-expand-lg .navbar-nav {
+        align-items: center;
+    }
+
+        .header-wrapper .navbar-expand-lg .navbar-nav .nav-link {
+            padding: 0;
+            font-size: .875rem;
+        }
+
+    .main-btn {
+        font-size: .875rem;
+    }
+    /*booking area*/
+    .booking-area {
+        padding: 3rem .625rem;
+    }
+
+        .booking-area .main-btn {
+            padding-left: .3125rem !important;
+            padding-right: .3125rem !important;
+        }
+
+    .room-items .room-content {
+        padding: 1rem 1.875rem;
+    }
+
+        .room-items .room-content h5 {
+            font-size: 1.2rem;
+        }
+
+        .room-items .room-content p {
+            font-size: .75rem;
+        }
+    /*services*/
+    .service-item-wrap .tab-content {
+        width: 100%;
+    }
+
+    .service-menu-area ul li a {
+        margin-bottom: .8125rem;
+        overflow: hidden;
+    }
+
+        .service-menu-area ul li a:nth-child(1) {
+            margin-left: -4.4375rem;
+        }
+
+        .service-menu-area ul li a:nth-child(2) {
+            margin-left: -6.9375rem;
+        }
+
+        .service-menu-area ul li a:nth-child(3) {
+            margin-left: -9.375rem;
+        }
+
+        .service-menu-area ul li a:nth-child(4) {
+            margin-left: -12.8125rem;
+        }
+
+        .service-menu-area ul li a h5 {
+            margin-bottom: .375rem;
+        }
+
+    .kitchen .row .food {
+        width: 18%;
+    }
+
+    .notification-counter {
+        top: 2px;
+        right: -2px;
+    }
+}
+
+@media (max-width: 991px) {
+    section {
+        padding: 1.875rem 0;
+        margin: 0 .1rem;
+    }
+    .header-scrolled {
+        height: auto;
+    }
+
+    .header-wrapper .menu-navbar-nav {
+        text-align: center;
+        padding-bottom: .9375rem;
+    }
+
+    .navbar-nav {
+        flex-direction: column;
+        position: absolute;
+        top: 70%;
+        left: 0;
+        right: 0;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 0px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+    }
+
+    .navbar-nav.open {
+        max-height: 600px;
+    }
+
+    .header-wrapper .toggle-btn {
+        display: block !important;
+        cursor: pointer;
+        padding: 0 10px;
+    }
+
+    .navbar-brand img {
+        margin-left: 2.1rem;
+    }
+
+    .banner-wrapper {
+        height: 25.625rem;
+    }
+
+    .booking-area {
+        padding: 3.125rem 1.875rem;
+    }
+
+    .room-items .room-content {
+        padding: 2rem 1.875rem;
+    }
+
+        .room-items .room-content h5 {
+            font-size: 1.5rem;
+        }
+
+        .room-items .room-content p {
+            font-size: 1rem;
+        }
+
+    .service-menu-area {
+        padding: 1.5rem 2.5rem;
+    }
+
+    .service-menu-area ul li {
+        padding: 1.5rem 1rem;
+        margin-left: unset !important;
+    }
+
+    .service-menu-area ul li a .service-icon {
+        height: 4.55rem;
+        width: 4.55rem;
+        margin-left: .7rem;
+    }
+    .services-wrapper .tab img, .service-item-wrap .img-col {
+        width: 100%;
+    }
+
+    .about-wrapper, .blog-home {
+        margin-top: 30rem;
+    }
+
+    .booking-area {
+        bottom: -15%;
+    }
+
+    .slider h1 {
+        font-size: 1.5rem !important;
+    }
+
+    .contact .row {
+        flex-direction: column;
+        margin-top: 30rem;
+    }
+
+
+    .book .row {
+        flex-direction: column;
+    }
+
+    .kitchen .row .food {
+        width: 23%;
+    }
+    .kitchen .row {
+        margin-top: 30rem;
+    }
+    .team-wrapper .row .alter{
+        margin-top: 3.5rem;
+    }
+    .search i{
+        display: none;
+    }
+    }
+
+@media (max-width: 768px) {
+    .projects {
+        width: 45%;
+    }
+    h1 {
+        font-size: 1.875rem;
+        line-height: 2.5rem;
+    }
+
+    h3 {
+        font-size: 1.75rem;
+        line-height: 2.1875rem;
+    }
+
+    h5 {
+        font-size: 1.25rem;
+    }
+
+    p {
+        font-size: .8125rem;
+        line-height: 1.5rem;
+    }
+
+    .blog-wrapper .blog-content {
+        margin: 0;
+    }
+    .search i {
+        display: inline;
+    }
+
+    .footer-wrapper > div {
+        padding: 0 1.875rem;
+    }
+
+    .icon i {
+        font-size: 1.2rem;
+    }
+
+    .kitchen .row .food {
+        width: 30%;
+    }
+
+    .blog-container {
+        flex-direction: column;
+    }
+
+    .blog-post, .sidebar {
+        width: 100%;
+        margin-left: 0;
+    }
+    #admin .book .card .book-img {
+        width: 100%;
+        margin: 5px;
+    }
+    .team-wrapper .row .alter-top {
+        margin-top: 3.5rem;
+    }
+    .team-wrapper .container {
+        margin-bottom: 1rem;
+    }
+}
+@media (max-width: 500px) {
+    .kitchen .row .food {
+        width: 45%;
+    }
+
+    h3 {
+        font-size: 1.6rem;
+    }
+
+    .dialog .container {
+        width: 85%;
+        margin: 1rem;
+    }
+    .projects {
+        width: 90%;
+    }
+}
+@media (max-width: 370px) {
+    .kitchen .row .food {
+        width: 96%;
+    }
+
+    h3 {
+        font-size: 1.6rem;
+    }
+    .slider h1 {
+        font-size: 1.2rem !important;
+        color: var(--secondary-color);
+        line-height:2.5rem;
+    }
+    h1 {
+        font-size: 1rem;
+        line-height: 1rem;
+    }
+}

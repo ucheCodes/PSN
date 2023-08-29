@@ -1,0 +1,413 @@
+﻿@page "/blog-post/{Id}"
+@inject SignalRService signalR
+@inject NavigationManager navigationManager
+<section>
+    @if (blog.Id == "")
+    {
+        <div class="blog-container">
+            <div class="blog-post">
+                <div class="img">
+                    <img src="./images/comp2.jpg" alt="Blog Post Image">
+                </div>
+                <span>Admin 25th May. 2023</span>
+                <h2>Blog Post Title</h2>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure harum tempore beatae voluptas
+                    excepturi fugit quisquam et at? Labore odio soluta harum maxime voluptate odit esse iste ea commodi
+                    ab, quibusdam, sapiente distinctio eaque iure nemo tenetur voluptatum eveniet. Libero nesciunt
+                    molestiae eaque error laudantium explicabo deleniti id! Libero, dolore. Quo laborum, facilis
+                    officiis a maxime modi sequi quasi quod ullam. Eaque doloremque autem tempore ipsam sapiente
+                    vel maiores consequuntur nobis ullam nisi, perferendis laudantium quam in fugit molestias unde,
+                    dolore libero alias? Neque architecto, vitae id reprehenderit aperiam omnis corrupti. Nihil
+                    temporibus fugit quidem illum. Provident, iste harum repellendus animi, nobis ut corporis illum
+                    ducimus quo deserunt fuga enim a minima, voluptatem accusantium amet quidem. Ipsum veritatis
+                    tempora et delectus voluptate nesciunt accusamus, eveniet alias dolorum aspernatur sit minus
+                    temporibus molestiae, quidem, quas nihil dolores vero. Necessitatibus blanditiis dolorum
+                    aspernatur? Labore tempore eligendi sapiente, atque laudantium perferendis voluptas architecto
+                    eos facilis deserunt dolorum numquam consectetur doloribus placeat nulla doloremque officia natus.
+                    Aperiam cumque et, voluptates commodi iure cupiditate quas in quos accusamus suscipit quis
+                    blanditiis officia enim consequatur, dolore ex corporis, maiores atque provident est
+                    necessitatibus natus nihil. Commodi fugiat cumque quod nemo ipsa laborum quos vero eligendi ducimus.
+                </p>
+                <h3>Leave a Comment</h3>
+                <input placeholder="enter full name" type="text" class="input-name">
+                <textarea placeholder="Type your comment"></textarea>
+                <button class="main-btn">Submit Comment</button>
+                <div class="comments">
+                    <h2>8 comments</h2>
+                    <div class="comment">
+                        <h4>Admin <span>24th May, 2023</span></h4>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Facere laborum delectus facilis odio! Ab soluta aspernatur illum
+                            molestiae necessitatibus esse impedit beatae? Adipisci id minima ipsum, veniam, eaque
+                            voluptatibus eveniet nisi enim doloribus dicta delectus eos, aspernatur dolor ullam
+                            doloremque maxime. Vitae, magnam. Magnam nihil ea ipsum error
+                            facere debitis vitae amet laboriosam, quaerat molestias commodi atque nobis ullam impedit!
+                        </p>
+                    </div>
+                    <div class="comment">
+                        <h4>Admin <span>24th May, 2023</span></h4>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Facere laborum delectus facilis odio! Ab soluta aspernatur illum
+                            molestiae necessitatibus esse impedit beatae? Adipisci id minima ipsum, veniam, eaque
+                            voluptatibus eveniet nisi enim doloribus dicta delectus eos, aspernatur dolor ullam
+                            doloremque maxime. Vitae, magnam. Magnam nihil ea ipsum error
+                            facere debitis vitae amet laboriosam, quaerat molestias commodi atque nobis ullam impedit!
+                        </p>
+                    </div>
+                    <div class="comment">
+                        <h4>Admin <span>24th May, 2023</span></h4>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Facere laborum delectus facilis odio! Ab soluta aspernatur illum
+                            molestiae necessitatibus esse impedit beatae? Adipisci id minima ipsum, veniam, eaque
+                            voluptatibus eveniet nisi enim doloribus dicta delectus eos, aspernatur dolor ullam
+                            doloremque maxime. Vitae, magnam. Magnam nihil ea ipsum error
+                            facere debitis vitae amet laboriosam, quaerat molestias commodi atque nobis ullam impedit!
+                        </p>
+                    </div>
+                    <div class="comment">
+                        <h4>Admin <span>24th May, 2023</span></h4>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Facere laborum delectus facilis odio! Ab soluta aspernatur illum
+                            molestiae necessitatibus esse impedit beatae? Adipisci id minima ipsum, veniam, eaque
+                            voluptatibus eveniet nisi enim doloribus dicta delectus eos, aspernatur dolor ullam
+                            doloremque maxime. Vitae, magnam. Magnam nihil ea ipsum error
+                            facere debitis vitae amet laboriosam, quaerat molestias commodi atque nobis ullam impedit!
+                        </p>
+                    </div>
+                    <div class="comment">
+                        <h4>Admin <span>24th May, 2023</span></h4>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Facere laborum delectus facilis odio! Ab soluta aspernatur illum
+                            molestiae necessitatibus esse impedit beatae? Adipisci id minima ipsum, veniam, eaque
+                            voluptatibus eveniet nisi enim doloribus dicta delectus eos, aspernatur dolor ullam
+                            doloremque maxime. Vitae, magnam. Magnam nihil ea ipsum error
+                            facere debitis vitae amet laboriosam, quaerat molestias commodi atque nobis ullam impedit!
+                        </p>
+                    </div>
+                    <div class="comment">
+                        <h4>Admin <span>24th May, 2023</span></h4>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Facere laborum delectus facilis odio! Ab soluta aspernatur illum
+                            molestiae necessitatibus esse impedit beatae? Adipisci id minima ipsum, veniam, eaque
+                            voluptatibus eveniet nisi enim doloribus dicta delectus eos, aspernatur dolor ullam
+                            doloremque maxime. Vitae, magnam. Magnam nihil ea ipsum error
+                            facere debitis vitae amet laboriosam, quaerat molestias commodi atque nobis ullam impedit!
+                        </p>
+                    </div>
+                    <div class="comment">
+                        <h4>Admin <span>24th May, 2023</span></h4>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Facere laborum delectus facilis odio! Ab soluta aspernatur illum
+                            molestiae necessitatibus esse impedit beatae? Adipisci id minima ipsum, veniam, eaque
+                            voluptatibus eveniet nisi enim doloribus dicta delectus eos, aspernatur dolor ullam
+                            doloremque maxime. Vitae, magnam. Magnam nihil ea ipsum error
+                            facere debitis vitae amet laboriosam, quaerat molestias commodi atque nobis ullam impedit!
+                        </p>
+                    </div>
+                    <div class="comment">
+                        <h4>Admin <span>24th May, 2023</span></h4>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Facere laborum delectus facilis odio! Ab soluta aspernatur illum
+                            molestiae necessitatibus esse impedit beatae? Adipisci id minima ipsum, veniam, eaque
+                            voluptatibus eveniet nisi enim doloribus dicta delectus eos, aspernatur dolor ullam
+                            doloremque maxime. Vitae, magnam. Magnam nihil ea ipsum error
+                            facere debitis vitae amet laboriosam, quaerat molestias commodi atque nobis ullam impedit!
+                        </p>
+                    </div>
+                    <div class="comment">
+                        <h4>Admin <span>24th May, 2023</span></h4>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Facere laborum delectus facilis odio! Ab soluta aspernatur illum
+                            molestiae necessitatibus esse impedit beatae? Adipisci id minima ipsum, veniam, eaque
+                            voluptatibus eveniet nisi enim doloribus dicta delectus eos, aspernatur dolor ullam
+                            doloremque maxime. Vitae, magnam. Magnam nihil ea ipsum error
+                            facere debitis vitae amet laboriosam, quaerat molestias commodi atque nobis ullam impedit!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar">
+                <div class="search">
+                    <input type="text" placeholder="Search blog...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="recent-posts">
+                    <h3>Recent Posts</h3>
+                    <hr>
+                    <div class="post">
+                        <img src="/./images//blog/mky-moody-AUF6Gl4wwzA-unsplash.jpg" alt="Recent Post Image">
+                        <p>Recent Post Description 1</p>
+                    </div>
+                    <div class="post">
+                        <img src="./images/contact/call.jpg" alt="Recent Post Image">
+                        <p>Recent Post Description 2</p>
+                    </div>
+                    <!-- More recent posts go here -->
+                </div>
+                <div class="categories">
+                    <h3>Categories</h3>
+                    <hr>
+                    <ul>
+                        <li><i class="fas fa-angle-right"></i>Category 1</li>
+                        <li><i class="fas fa-angle-right"></i>Category 2</li>
+                        <li><i class="fas fa-angle-right"></i>Category 3</li>
+                        <!-- More categories go here -->
+                    </ul>
+                </div>
+                <div class="tags">
+                    <h3>Related Tags</h3>
+                    <hr>
+                    <ul>
+                        <li>Restaurant</li>
+                        <li>Cafeteria</li>
+                        <li>Eatery</li>
+                        <li>tag</li>
+                        <li>Restaurant</li>
+                        <li>Cafeteria</li>
+                        <li>Eatery</li>
+                        <li>tag</li>
+                        <!-- More tags go here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="blog-container">
+            <div class="blog-post">
+                <div class="img">
+                    <img src="@blog.ImagePath" alt="Blog Post Image">
+                </div>
+                <span>Admin @blog.Date.ToString("MMMM d, yyyy hh:mm tt")</span>
+                <h2>@blog.Title</h2>
+                <p>
+                    @RenderHtml(blog.Body)
+                </p>
+                <h3>Leave a Comment</h3>
+                <span class="msg @msgClass">@message</span>
+                <input @bind="username" placeholder="enter full name" type="text" class="input-name">
+                <textarea @bind="userComment" placeholder="Type your comment"></textarea>
+                <button @onclick="AddComment" class="main-btn">Submit Comment</button>
+                <div class="comments">
+                    @if (blogComments.Count > 0)
+                    {
+                        <h2>
+                            @blogComments.Count comments
+                        </h2>
+                        @foreach (var comment in blogComments)
+                        {
+                            <div class="comment">
+                                <h4>
+                                    @comment.Username <span>@comment.Date.ToString("MMM d, yyyy hh:mm tt")</span>&nbsp;&nbsp;&nbsp;
+                                    @if (true)//store.State().IsAdmin.isAdmin
+                                    {
+                                        <i @onclick="(() => {deleteId = comment.Id; showDialog = true;})" class="fas fa-trash"></i>
+                                    }
+                                </h4>
+                                <p>
+                                    @comment.Comment
+                                </p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="sidebar">
+                <div class="search">
+                    <input @onblur="Search" @bind="search" type="text" placeholder="Search blog...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="recent-posts">
+                    <h3>Recent Posts</h3>
+                    <hr>
+                    @foreach (var blog in recentBlogs)
+                    {
+                        @if (recentCount <= 20)
+                        {
+                            <div @onclick="(() => GetInitialData(blog.Id))" class="post">
+                                <img src="@blog.ImagePath" alt="Recent Post Image">
+                                <p>@blog.Title</p>
+                            </div>
+                        }
+                        recentCount++;
+                    }
+                </div>
+                <div class="categories">
+                    <h3>Categories</h3>
+                    <hr>
+                    <ul>
+                        @foreach (var c in blogs.DistinctBy(x => x.Category))
+                        {
+                            @if (categoryCount <= 12)
+                            {
+                                <li>@c.Category</li>
+                            }
+                            categoryCount++;
+                        }
+                    </ul>
+                </div>
+                <div class="tags">
+                    <h3>Related Tags</h3>
+                    <hr>
+                    <ul>
+                        @foreach (var tag in blogs.DistinctBy(x => x.Tag))
+                        {
+                            @if (tagCount <= 20)
+                            {
+                                <li>@tag.Tag</li>
+                            }
+                            tagCount++;
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+@if (showDialog)
+{
+    <section class="dialog">
+        <div class="container">
+            <span @onclick="CloseDialog" class="close">x</span>
+            <span>Do you want to delete permanently this comment?</span>
+            <button @onclick="(() => Delete(deleteId))" class="main-btn">Confirm Delete</button>
+        </div>
+    </section>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; } = "";
+    Blogs blog = new();
+    List<Blogs> blogs = new();
+    List<Blogs> recentBlogs = new();
+    List<BlogComment> blogComments = new();
+    string username = "";
+    string userComment = "";
+    private string message = "";
+    private string msgClass = "";
+    private string search = "";
+    private string deleteId = "";
+    private bool showDialog = false;
+    int recentCount = 0;
+    int tagCount = 0;
+    int categoryCount = 0;
+    private HubConnection hubConnection => signalR.HubConnection;
+    protected override void OnInitialized()
+    {
+        GetInitialData(Id);
+        hubConnection.On<BlogComment>("AddComment", UpdateSignalRComment);
+    }
+    private  void GetInitialData(string id)
+    {
+        blog = database.Read<string,Blogs>("Blogs",id).Value;
+        var allComments = database.ReadAll<string, BlogComment>("Comments").Values.ToList();//(await bc.ReadAllComments()).ToList();
+        if (allComments != null && allComments.Count > 0 && blog.Id != "")
+        {
+            blogComments = allComments.Where(c => c.BlogId == blog.Id).OrderByDescending(c => c.Date).ToList();
+        }
+        blogs = database.ReadAll<string, Blogs>("Blogs").Values.ToList();//await bc.ReadAll();
+        recentBlogs = blogs.OrderByDescending(x => x.Date).ToList();
+        if (Id != id)//shows that a new blog is selected
+            Id = id;//We now have to work with the current id
+        recentCount = 0; tagCount = 0; categoryCount = 0;
+    }
+    private void UpdateSignalRComment(BlogComment comment)
+    {
+        if (comment.BlogId == Id)//if the comment is for the current blog post
+        {
+            blogComments.Add(comment);
+            blogComments = blogComments.OrderByDescending(b => b.Date).ToList();
+            InvokeAsync(StateHasChanged);
+        }
+    }
+    public RenderFragment RenderStringToHTML(string htmlString)
+    {
+        return builder =>
+        {
+            builder.AddContent(1, htmlString);
+
+        };
+    }
+    public MarkupString RenderHtml(string html)
+    {
+        return (MarkupString)html;
+    }
+    private async void AddComment()
+    {
+        if (blog.Id != "" && userComment != "" && username != "")
+        {
+            var comment = new BlogComment()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    BlogId = blog.Id,
+                    Comment = userComment,
+                    Username = username,
+                    Date = DateTime.Now
+                };
+            string key = JsonConvert.SerializeObject(comment.Id);
+            string value = JsonConvert.SerializeObject(comment);
+            var isAdded = database.Create("Comments", key, value);//await bc.AddBlogComment(comment);
+            if (isAdded)
+            {
+                try
+                {
+                    message = "";
+                    msgClass = "";
+                    userComment = "";
+                    await hubConnection.SendAsync("AddComment", comment);
+                    comment = new();
+                }
+                catch
+                {
+
+                }
+            }
+        }
+        else
+        {
+            message = "name and comment fields must not be empty";
+            msgClass = "red";
+        }
+    }
+    private void CloseDialog()
+    {
+        showDialog = false;
+        deleteId = string.Empty;
+    }
+    private void Delete(string id)
+    {
+        if (!string.IsNullOrEmpty(id))
+        {
+            var isDel = database.Delete("Comments", id);//bc.DeleteComments(id);
+            if (isDel)
+            {
+                var b = blogComments.Find(x => x.Id == id);
+                blogComments.Remove(b ?? new());
+                CloseDialog();
+            }
+        }
+    }
+    private void Search()
+    {
+        if (!string.IsNullOrEmpty(search))
+        {
+            string searchTerm = search.ToLower();
+            recentBlogs = blogs.Where(b => b.Title.ToLower().Contains(searchTerm) ||
+            b.Tag.ToLower().Contains(searchTerm) || b.Body.ToLower().Contains(searchTerm)).ToList();
+            if (recentBlogs.Count == 0)
+                recentBlogs = blogs.OrderByDescending(x => x.Date).ToList();
+        }
+    }
+}

@@ -1,0 +1,92 @@
+﻿@inject IStore Store
+@inject ProtectedLocalStorage localStorage
+
+<section id="contact" class="footer-wrapper mt-3 mt-md-0 pb-0">
+    <div class="container pb-3">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <h5>PSN</h5>
+                <p class="ps-0">
+                    At Peter's Soft Network, our mission is to revolutionize multiple industries by leveraging technology
+                    and building networks of individuals and resources. We are committed to creating functional and scalable
+                    software applications that empower businesses, individuals, and communities to thrive in an interconnected world.
+                </p>
+                <div class="contact-info">
+                    <ul class="list-unstyled">
+                        <li><a><i class="fa fa-home me-3"></i>Ogbanga Estate, Trans-Amadi Layout, PH City, Rivers state.</a></li>
+                        <li><a><i class="fa fa-phone me-3"></i>+234 8181734574</a></li>
+                        <li><a><i class="fa fa-envelope me-3"></i>peters.soft.network@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h5>More Links</h5>
+                <ul class="link-widget p-0">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/contact">About us</a></li>
+                    <li><a href="/projects">Projects</a></li>
+                    <li><a href="/blog">Blog posts</a></li>
+                    <li><a href="/gallery">Our Gallery</a></li>
+                    <li><a href="/contact">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h5>Quick Links</h5>
+                <ul class="link-widget p-0">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/contact">About us</a></li>
+                    <li><a href="/project">projects</a></li>
+                    <li><a href="/blog">Blog posts</a></li>
+                    <li><a href="/gallery">Our Gallery</a></li>
+                    <li><a href="/contact">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h5>Subscribe to NewsLetter</h5>
+                <div class="form-group mb-4">
+                    <input @onfocusout="MakeAdmin" @bind="code" type="email" placeholder="enter authorized email here" class="form-control bg-transparent">
+                    <input type="password" placeholder="enter authorized password here" class="form-control bg-transparent">
+                    <button class="main-btn rounded-2 mt-3 border-white text-white">Subscribe</button>
+                </div>
+                <h5>Stay Connected</h5>
+                <ul class="social-network d-flex align-items-center p-0">
+                    <li><a href="https://www.facebook.com/profile.php?id=61550889565388" class="fab fa-facebook-f"></a></li>
+                    <li><a href="https://twitter.com/Peters_Soft_Net" class="fab fa-twitter"></a></li>
+                    <li><a href="https://www.linkedin.com/in/peter-soft-a93b92254/" class="fab fa-linkedin"></a></li>
+                    <li><a href="https://www.instagram.com/peter_soft/" class="fab fa-instagram"></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid copyright-section">
+        <p>UI credits <a href="/">Code4Education</a>, <a href="/">CodingDesign</a> full stack dev: <a href="https://hki.softdb.com.ng/">Peter's Soft Network</a></p>
+    </div>
+</section>
+
+@code {
+    private string code = "";
+    private async void MakeAdmin()
+    {
+        if(code == "$code$admin$")
+        {
+            Store.MakeAdmin(true);
+            code = "";
+            try
+            {
+                await localStorage.SetAsync("access", true);
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+    protected override void OnInitialized()
+    {
+        Store.AddStateChangedAction(() => { StateHasChanged(); });
+    }
+    public void Dispose()
+    {
+        Store.RemoveStateChangedAction(() => { StateHasChanged(); });
+    }
+}
+

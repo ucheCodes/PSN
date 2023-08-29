@@ -1,0 +1,144 @@
+﻿<section id="about" class="about-wrappers">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center mb-5">
+                <h6>Care to know what drives us and what our visions are?</h6>
+                <h3>Our Core Services</h3>
+            </div>
+        </div>
+        <div class="row flex-lg-row flex-column-reverse">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h3>
+                    @activeTitle
+                </h3>
+                <p class="p">
+                    @activeInfo
+                </p>
+            </div>
+            <div class="col-lg-6 mb-4 mb-lg-0 ps-lg-4 text-center">
+                <img src="@activeImg" alt="about" class="img-fluid">
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        @for (int i = 0; i < services.Count; i++)
+        {
+            int count = i;
+            <div @onclick="(() => SetActiveSerivice(count))" class="dot @(i.Equals(activeIndex) ? "active":"")"></div>
+        }
+    </div>
+</section>
+
+@code{
+    private string activeTitle = "";
+    private string activeInfo = "";
+    private string activeImg = "";
+    private int activeIndex = 0;
+    private Timer? timer;
+    List<Service> services = new List<Service>()
+    {
+        new Service("Networking","./images/net.jpg",network),
+        new Service("Software Engineering","./images/soft.jpg",soft),
+        new Service("Education","./images/edu.jpg",edu),
+        new Service("Agriculture","./images/agri.jpg",agri),
+        new Service("Geophysics","./images/bathy1.png",geo),
+        new Service("Commerce & Transportation","./images/bg2.jpg",trans),
+        new Service("Entertainment","./images/music.jpg",ent),
+        new Service("Food Processing","./images/food.jpg",food),
+    };
+
+    static string network = $"In the rapidly evolving landscape of technology and business,"+
+    " Peter's Soft Network emerges as a dynamic start-up company set to make a profound impact"+
+    " across multiple sectors. With a vision to bridge the gap between Technology, Education,"+
+    " Agriculture, Commerce, Transportation, Entertainment, Food Processing, and Music, Peter's"+
+    " Soft Network aims to create robust networks of individuals and resources while developing"+
+    " functional and scalable software applications.";
+
+    static string soft = $"Peter's Soft Network is a trailblazing software engineering company with" +
+    " a profound understanding of cutting-edge technologies. With expertise spanning software development," +
+    " Blockchain Technology, IoT, data analysis, and a plethora of other tech-related fields, we lead the" +
+    " charge in driving innovation and digital transformation.Our team of skilled engineers and tech"+
+    " enthusiasts is passionate about delivering state-of-the-art solutions tailored to meet the unique"+
+    " needs of our clients. Through meticulous planning, agile development methodologies, and an unwavering"+
+    " commitment to quality, we bring groundbreaking software applications to life.";
+
+    static string edu = "Education is another crucial domain where Peter's Soft Network seeks to make a"+
+    " meaningful impact. By creating collaborative platforms and innovative e-learning solutions, the company"+
+    " aims to revolutionize the way knowledge is accessed and shared. Through personalized learning experiences,"+
+    " interactive content, and intelligent analytics, Peter's Soft Network aims to enhance educational outcomes"+
+    " and empower learners of all ages.";
+
+    static string agri = "Recognizing the significance of Agriculture, Peter's Soft Network is committed to"+
+    " optimizing farming practices through technology. By developing smart farming solutions, the company aims"+
+    " to enhance crop yield, optimize resource utilization, and foster sustainable agricultural practices. From"+
+    " precision farming and crop monitoring to supply chain management and market integration, Peter's Soft Network's"+
+    " software applications strive to empower farmers and agribusinesses, enabling them to thrive in a rapidly changing industry.";
+
+    static string ent = "Entertainment and Music hold a special place in Peter's Soft Network's vision. By creating innovative"+
+    " platforms and applications, the company aims to revolutionize the way content is produced, distributed, and consumed. From"+
+    " immersive virtual reality experiences to personalized music streaming platforms, Peter's Soft Network's software applications"+
+    " aim to provide unparalleled entertainment experiences and foster the growth of emerging artists and creators.";
+
+    static string trans = "In the realm of Commerce and Transportation, Peter's Soft Network envisions a future where businesses can"+
+    " seamlessly connect and transact, and transportation networks can operate efficiently. By building robust e-commerce platforms,"+
+    " supply chain management systems, and logistics optimization tools, the company aims to empower businesses to thrive in the digital"+
+    " marketplace and streamline their operations. Through smart transportation solutions, Peter's Soft Network aims to enhance the efficiency"+
+    " and sustainability of logistics networks, improving the movement of goods and people.";
+
+    static string food = "Food Processing is another domain where Peter's Soft Network aims to make a difference. By developing software"+
+    " solutions that optimize food processing operations, improve quality control, and ensure food safety, the company seeks to enhance the"+
+    " efficiency and sustainability of the food industry. From farm-to-table traceability and supply chain management to quality assurance and"+
+    " compliance, Peter's Soft Network's software applications aim to empower food processing businesses to meet the evolving needs of consumers.";
+
+    static string geo = "As a brand with strong connection and affiliation with one of the most prominent Geo - Marine servicing company in Nigeria," +
+    " PSN possesses comprehensive expertise in the processing and analysis of diverse geophysical bathymetry" +
+    " and hydrography datasets. Our proficiency extends to handling intricate data types, including magnetometers, multi-beam, single-beam, side scan and seismic" +
+    " datasets. With a strong command over advanced navigation software like Eiva, Qinsy, and Hypack, We are adept at ensuring accurate and reliable data collection" +
+    " navigation, and post-processing. Our portfolio showcases a track record of successful projects where we've harnessed great geophysical prowesses. From conducting" +
+    " bathymetric surveys to mapping underwater terrains using multi-beam sonar systems, We excel in transforming raw data into actionable insights bringing innovation" +
+    " to the forefront, implementing cutting-edge techniques to enhance data quality and resolution.";
+
+    protected override void OnInitialized()
+    {
+        activeTitle = services[0].Title;
+        activeInfo = services[0].Text;
+        activeImg = services[0].ImagePath;
+        timer = new Timer(_ => ChangeServices(), null, 20000, 20000);
+    }
+    private void ChangeServices()
+    {
+        activeIndex++;
+        if (activeIndex >= services.Count)
+        {
+            activeIndex = 0;
+        }
+        SetService(activeIndex);
+    }
+    private void SetActiveSerivice(int i)
+    {
+        activeIndex = i;
+        SetService(activeIndex);
+    }
+    private void SetService(int activeIndex)
+    {
+        activeImg = services[activeIndex].ImagePath;
+        activeTitle = services[activeIndex].Title;
+        activeInfo = services[activeIndex].Text;
+        InvokeAsync(StateHasChanged);
+    }
+
+
+    /*Define Service Struct*/
+    private struct Service
+    {
+        public string Title;
+        public string ImagePath;
+        public string Text;
+        public Service(string title, string imgPath, string text)
+        {
+            Title = title;
+            ImagePath = imgPath;
+            Text = text;
+        }
+    }
+}

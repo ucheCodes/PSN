@@ -1,0 +1,306 @@
+﻿@page "/admin"
+@inject NavigationManager navigationManager
+@inject IStore store
+@implements IDisposable
+
+<section id="admin" class="blog-wrapper pb-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center mb-5">
+                <h6>Explore Full Administrative Controls and Manage the Entire System</h6>
+                <div class="book">
+                    <select @bind="activeSelection" class="form-select">
+                        <option value="0" selected>Select What to do</option>
+                        <option value="1">Create Blog</option>
+                        <option value="2">Add New Project</option>
+                        <option value="3">Add Graphics</option>
+                    </select>
+                </div>
+            </div>
+            @foreach (var item in errors)
+            {
+               <span class="red">@item</span>
+            }
+            @if (activeSelection == 1)
+            {
+                <EditForm Model="blog">
+                    <div class="book">
+                        <div class="book-content">
+                            <h3>Add a Blog Post</h3>
+                            <div class="card">
+                                <span class="msg @msgClass">@message</span>
+                                <div class="x">
+                                    <InputText @onfocusout="(() => ValidateBlogField(blog.Tag,blogFields[0]))" @bind-Value="blog.Title" maxlength="100" placeholder="Title of Blog" type="text" class="input-name" />
+                                </div>
+                                <div class="x">
+                                    <InputText @onfocusout="(() => ValidateBlogField(blog.Tag,blogFields[1]))" type="text" @bind-Value="blog.Description" maxlength="200" class="form-control" placeholder="Brief Blog Description" />
+                                </div>
+                                <div class="x">
+                                    <InputText @onfocusout="(() => ValidateBlogField(blog.Tag,blogFields[2]))" type="text" @bind-Value="blog.Tag" maxlength="45" class="form-control" placeholder="add search tag" />
+                                </div>
+                                <div class="x">
+                                    <InputText @onfocusout="(() => ValidateBlogField(blog.Category,blogFields[3]))" type="text" @bind-Value="blog.Category" maxlength="20" class="form-control" placeholder="add category text e.g kitchen" />
+                                </div>
+                                <div class="x">
+                                    <InputFile type="file" class="form-control" accept=".png,.jpg,.jpeg" OnChange="@LoadFile" placeholder="select picture of Blog" />
+                                </div>
+                                <div class="book-img">
+                                    <img src="@imgPath" />
+                                </div>                          
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+                @*                <div class="x">
+                    <textarea @bind="Body" placeholder="enter body of blog"></textarea>
+                </div>*@
+                <div class="x">
+                    <Editor @onfocusout="(() => ValidateBlogField(Body,blogFields[4]))" placeholder="Enter a detailed blog post exploring our dynamic WYSIWYG Editor" ApiKey="lc0y2631rhpw976319zs6x60dzg9dpd9pvysbadgvaijxarn" @bind-Value=Body @bind:event="oninput" @Conf="@editorConf" />
+                </div>
+                <div class="blog-submit-div">
+                    <button @onclick="AddBlog" type="submit" class="btn btn-primary">Add to Blog</button>
+                </div>
+            }
+            else if (activeSelection == 2)
+            {
+                <EditForm Model="project">
+                    <div class="book">
+                        <div class="book-content">
+                            <h3>Add a new Project</h3>
+                            <div class="card">
+                                <span class="msg @msgClass">@message</span>
+                                <div class="x">
+                                    <InputText @bind-Value="project.Title" maxlength="100" placeholder="Enter Project's title" type="text" class="input-name" />
+                                </div>
+                                <div class="x">
+                                    <InputText @bind-Value="project.Link" maxlength="100" placeholder="Enter Project's link here'" type="text" class="input-name" />
+                                </div>
+                                <div class="x">
+                                    <InputText type="text" @bind-Value="project.Text" maxlength="200" class="form-control" placeholder="Brief Project Description" />
+                                </div>
+                                <div class="x">
+                                    <InputFile type="file" class="form-control" accept=".png,.jpg,.jpeg" OnChange="@LoadFile" placeholder="select picture of Blog" />
+                                </div>
+                                <div class="book-img">
+                                    <img src="@imgPath" />
+                                </div>
+                                <button class="btn btn-primary" @onclick="AddProject">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+            }
+            else if (activeSelection == 3)
+            {
+                <div class="book">
+                    <div class="book-content">
+                        <h3>Add to gallery collection</h3>
+                        <span class="msg @msgClass">@message</span>
+                        <div class="book-img">
+                            <img src="@imgPath" />
+                        </div>
+                        <InputFile type="file" OnChange="@LoadFile"/>
+                        <button @onclick="AddGallery" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</section>
+
+@code {
+    int activeSelection = 0;
+    private Dictionary<string, object> editorConf = new Dictionary<string, object>{
+        {"toolbar", "undo redo | bold italic | bullist numlist"},
+        {"width", 400}
+    };
+    private string Body = "";
+    public Blogs blog { get; set; } = new();
+    public Projects project { get; set; } = new();
+    List<string> blogFields = new List<string>() { "The title", "The description", "The tag", "The category", "The body" };
+    private string message = "";
+    private string msgClass = "";
+    private string category = "";
+    string imgPath = "./images/edu.jpg";
+
+    protected override void OnInitialized()
+    {
+        var data = store.State().Edit;
+        switch (data?.Kvp.Key)
+        {
+            case 1:
+                activeSelection = 1;
+                blog = JsonConvert.DeserializeObject<Blogs>(data.Kvp.Value) ?? new Blogs();
+                imgPath = blog.ImagePath;
+                Body = blog.Body;
+                break;
+            case 2:
+                activeSelection = 2;
+                project = JsonConvert.DeserializeObject<Projects>(data.Kvp.Value) ?? new Projects();
+                imgPath = project.ImagePath;
+                break;
+            default:
+                activeSelection = 0;
+                project = new();
+                blog = new();
+                break;
+        }
+        store.AddStateChangedAction(() => { StateHasChanged(); });
+    }
+    private void ValidateBlogField(string value, string field)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            message = $"{field} field must not be empty.";
+            msgClass = "red";
+        }
+        else
+        {
+            message = string.Empty;
+            msgClass = string.Empty;
+        }
+    }
+    private void AddBlog()
+    {
+        if (!string.IsNullOrEmpty(blog.Title) && !string.IsNullOrEmpty(blog.Description) &&
+        !string.IsNullOrEmpty(Body) && !string.IsNullOrEmpty(blog.Category) && !string.IsNullOrEmpty(blog.Tag))
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(blog.Id))
+                    blog.Id = Guid.NewGuid().ToString();
+                blog.ImagePath = imgPath;
+                blog.Date = DateTime.Now;
+                blog.Body = Body;
+                string key = JsonConvert.SerializeObject(blog.Id);
+                string value = JsonConvert.SerializeObject(blog);
+                var isAdded = database.Create("Blogs",key,value);
+                if (isAdded)
+                {
+                    message = "data upload success!";
+                    msgClass = "green";//work on next code below
+                    navigationManager.NavigateTo($"/blog-post/{blog.Id}");
+                    Body = string.Empty;
+                    //blog = new Blogs();//causes disposal error
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        else
+        {
+            message = "input fields must not be empty";
+            msgClass = "red";
+        }
+    }
+    private void AddGallery()
+    {
+        if (imgPath != "" && imgPath != "./images/edu.jpg")
+        {
+            string key = JsonConvert.SerializeObject(imgPath);
+            string value = JsonConvert.SerializeObject(imgPath);
+            var isAdded = database.Create("Gallery", key, value);
+            if (isAdded)
+            {
+                navigationManager.NavigateTo("gallery");
+            }
+        }
+        else
+        {
+            msgClass = "red";
+            message = "file empty or too large. kindly select another";
+        }
+    }
+    private void AddProject()
+    {
+        if (project.Link != "" && project.Text != "" && project.Title != "")
+        {
+            if (string.IsNullOrEmpty(project.Id))
+            {
+                project.Id = Guid.NewGuid().ToString();
+            }
+            project.Date = DateTime.Now;
+            project.ImagePath = imgPath;
+            string key = JsonConvert.SerializeObject(project.Id);
+            string value = JsonConvert.SerializeObject(project);
+            var isAdded = database.Create("Projects", key, value);
+            if (isAdded)
+            {
+                message = "data upload success!";
+                msgClass = "green";
+                project = new();
+            }
+        }
+        else
+        {
+            message = "project title, link and description must not be empty";
+            msgClass = "red";
+        }
+    }
+    public void Dispose()
+    {
+        if (store.State().Edit.Kvp.Key > 0)
+        {
+            store.SetEditValue(0, "");
+        }
+        store.RemoveStateChangedAction(() => { StateHasChanged(); });
+    }
+
+    //File upload management
+    [Inject]
+    private IWebHostEnvironment? _environment { get; set; }
+    private long maxFileSize = 1024 * 1024 * 7;
+    private List<string> errors = new();
+    private IBrowserFile? file;
+
+
+    private async void LoadFile(InputFileChangeEventArgs e)
+    {
+        file = e.File;
+        string relativePath = await CaptureFile();
+        imgPath = relativePath;
+        message = "";
+    }
+    private async Task<string> CaptureFile()
+    {
+        if (file == null)
+        {
+            return "";
+        }
+        string path = "";
+        try
+        {
+            if (_environment != null)
+            {
+                var uploadPath = Path.Combine(_environment.WebRootPath, "Upload");
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+                string newFilename = Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(file.Name));
+                path = Path.Combine(uploadPath, newFilename);
+
+                string fileExtension = Path.GetExtension(file.Name);
+                string relativePath = Path.Combine("Upload", newFilename);
+                await using FileStream fs = new(path, FileMode.Create);
+                await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+                return Path.Combine("./", relativePath);
+            }
+            return "";
+
+        }
+        catch (Exception ex)
+        {
+            errors.Add($"File : {file.Name} Error : {ex.Message}");
+            msgClass = "red";
+            message = $"File : {file.Name} Error : {ex.Message}";
+            return "";
+        }
+
+    }
+}
+

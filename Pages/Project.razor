@@ -1,0 +1,115 @@
+﻿@page "/project"
+@inject IStore Store
+@inject NavigationManager navigationManager
+@implements IDisposable
+
+@if (projects.Count > 0)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 section-title text-center mb-5">
+                <h6>A tabled sequence of some of our past and recent projects</h6>
+                <h3>Our Projects</h3>
+            </div>
+        </div>
+        <div class="row-prj">
+            @foreach (var item in projects)
+            {
+                <div class="flex-column projects">
+                    <div class="bg">
+                        <img src="@item.ImagePath" />
+                    </div>
+                    <div class="content">
+                        <h2>@item.Title</h2>
+                        @if (Store.State().Admin.IsAdmin)
+                        {
+                            <div class="admin">
+                                <i @onclick="(() => {deleteId = item.Id; deleteName = item.Title; showDialog = true;})" class="fas fa-trash"></i>
+                                <i @onclick="(() =>{Edit(item);})" class="fas fa-edit"></i>
+                            </div>
+                        }
+                        <a href="@item.Link">click to view</a>
+                        <div class="text">
+                            <p class="p">
+                                @item.Text
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                count++;
+                if (Limit == count)
+                    break;
+            }
+        </div>
+    </div>
+}
+
+@if (showDialog)
+{
+    <section class="dialog">
+        <div class="container">
+            <span @onclick="CloseDialog" class="close">x</span>
+            <span>Do you want to delete @deleteName permanently?</span>
+            <button @onclick="(() => Delete(deleteId))" class="main-btn">Confirm Delete</button>
+        </div>
+    </section>
+}
+
+
+@code{
+    [Inject]
+    private IWebHostEnvironment? _environment { get; set; }
+    [Parameter]
+    public int Limit { get; set; }
+    private int count = 0;
+    private List<Projects> projects = new List<Projects>();
+    private bool showDialog = false;
+    private string deleteName = "";
+    private string deleteId = "";
+
+    protected override void OnInitialized()
+    {
+        projects = database.ReadAll<string, Projects>("Projects").Values.OrderByDescending(x => x.Date).ToList();
+    }
+    private void CloseDialog()
+    {
+        showDialog = false;
+        deleteId = string.Empty;
+        deleteName = string.Empty;
+    }
+    private void Delete(string id)
+    {
+        if (!string.IsNullOrEmpty(id))
+        {
+            var isDel = database.Delete("Projects", id);
+            if (isDel)
+            {
+                var p = projects.Find(x => x.Id == id);
+                DeleteImage(p?.ImagePath ?? "");
+                projects.Remove(p ?? new());
+                CloseDialog();
+            }
+        }
+    }
+    private void Edit(Projects project)
+    {
+        Store.SetEditValue(2, JsonConvert.SerializeObject(project));
+        navigationManager.NavigateTo("/admin");
+    }
+    public void Dispose()
+    {
+        Store.RemoveStateChangedAction(() => { StateHasChanged(); });
+    }
+    public void DeleteImage(string filePath)
+    {
+        if (_environment != null)
+        {
+            string imagePath = Path.Combine(_environment.WebRootPath, filePath);
+
+            if (File.Exists(imagePath))
+            {
+                File.Delete(imagePath);
+            }
+        }
+    }
+}

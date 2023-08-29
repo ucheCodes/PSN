@@ -1,0 +1,82 @@
+﻿@inject NavigationManager navigationManager
+
+<section id="home" class="banner-wrapper ps-0">
+    <div class="swiper mySwiper">
+        @foreach (var slide in slides)
+        {
+            <div class="slider @(slide.IsActive ?  @sliderAnimation : "")" style="background-image: url('@slide.ImagePath')">
+                <div class="slide-caption text-center">
+                    <div>
+                        <h1>@slide.Header</h1>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="swiper-pagination">
+            @for (int i = 0; i < slides.Count; i++)
+            {
+                int _i = i;
+                <span class="@((i == activeIndex) ? "active" : "")" @onclick="(() => SetActiveIndex(_i))"></span>
+            }
+        </div>
+    </div>
+</section>
+
+
+@code {
+    [Parameter]
+    public List<Slides> slides { get; set; } = new List<Slides>();
+    [Parameter]
+    public string sliderAnimation { get; set; } = "";
+    private int activeIndex = 0;
+    private Timer? timer;
+    protected override void OnInitialized()
+    {
+        timer = new Timer(_ => NextSlide(), null, 15000, 15000);
+    }
+
+    private void SetActiveIndex(int index)
+    {
+        activeIndex = index;
+        setActiveSlide(index);
+        InvokeAsync(StateHasChanged);
+    }
+    private void setActiveSlide(int currentIndex)
+    {
+        for (int i = 0; i < slides.Count; i++)
+        {
+            if (i == currentIndex)
+            {
+                slides[i].IsActive = true;
+            }
+            else
+            {
+                slides[i].IsActive = false;
+            }
+        }
+    }
+
+    private void PrevSlide()
+    {
+        activeIndex--;
+        if (activeIndex < 0)
+        {
+            activeIndex = slides.Count - 1;
+        }
+        setActiveSlide(activeIndex);
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void NextSlide()
+    {
+        activeIndex++;
+        if (activeIndex >= slides.Count)
+        {
+            activeIndex = 0;
+        }
+        setActiveSlide(activeIndex);
+        InvokeAsync(StateHasChanged);
+    }
+}
+
+

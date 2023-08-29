@@ -1,0 +1,102 @@
+﻿@inject IJSRuntime jsRuntime
+@implements IDisposable
+@inject IStore Store
+@inject ProtectedLocalStorage localStorage
+
+<nav class="@headerClass navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand">
+            <img src="images/1_LOGO.png" alt="logo" class="img-fluid">
+            &nbsp; PSN
+        </a>
+        <div id="navbarNav">
+            <ul class="navbar-nav @(isNavbarOpen ? "open" : "")">
+                <li @onclick="CloseNavBar" class="nav-item icon">
+                    <a href="#" class="nav-link active">Home</a>
+                </li>
+                <li @onclick="CloseNavBar" class="nav-item icon">
+                    <a href="/project" class="nav-link">Projects</a>
+                </li>
+                <li @onclick="CloseNavBar" class="nav-item icon">
+                    <a href="/gallery" class="nav-link">Gallery</a>
+                </li>
+                <li @onclick="CloseNavBar" class="nav-item icon">
+                    <a href="/contact" class="nav-link">Contact</a>
+                </li>
+                <li @onclick="CloseNavBar" class="nav-item icon">
+                    <a href="/blog" class="nav-link">Blogs</a>
+                </li>
+                @if (Store.State().Admin.IsAdmin)
+                {
+                    <li @onclick="CloseNavBar" class="nav-item icon">
+                        <a href="admin" class="nav-link"><i class="fas fa-user-lock"></i></a>
+                    </li>
+                }
+                <li class="nav-item icon">
+                    <a href="https://api.whatsapp.com/send?phone=2348181734574"><i class="fab fa-whatsapp"></i></a>
+                </li>
+            </ul>
+        </div>
+        <span class="toggle-btn icon" @onclick="ToggleNavbar">
+            <i class="fas fa-bars"></i>
+        </span>
+    </div>
+</nav>
+
+
+
+@code {
+    private string headerClass = "navbar";
+    private bool isNavbarOpen = false;
+    protected override void OnInitialized()
+    {
+        Store.AddStateChangedAction(() => { StateHasChanged(); });
+    }
+    public void Dispose()
+    {
+        Store.RemoveStateChangedAction(() => { StateHasChanged(); });
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await jsRuntime.InvokeVoidAsync("addScrollListener");
+        }
+        GetAccess();
+    }
+    private async void GetAccess()
+    {
+        try
+        {
+            var result = await localStorage.GetAsync<bool>("access");
+            if (result.Value)
+            {
+                Store.MakeAdmin(true);
+            }
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    private void ToggleNavbar()
+    {
+        isNavbarOpen = !isNavbarOpen;
+    }
+    private void CloseNavBar()
+    {
+        if (isNavbarOpen)
+        {
+            isNavbarOpen = false;
+        }
+    }
+    private void CloseNotif()
+    {
+        CloseNavBar();
+    }
+    private void ToggleLoginShow()
+    {
+        CloseNavBar();
+    }
+}
+
