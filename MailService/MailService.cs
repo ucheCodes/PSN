@@ -1,4 +1,4 @@
-﻿namespace MailService
+﻿namespace PSN_Official.MailService
 {
     using MailKit;
     using MailKit.Net.Smtp;

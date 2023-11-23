@@ -1,5 +1,6 @@
 ﻿@inject IStore Store
 @inject ProtectedLocalStorage localStorage
+@inject NavigationManager navigationManager
 
 <section id="contact" class="footer-wrapper mt-3 mt-md-0 pb-0">
     <div class="container pb-3">
@@ -42,11 +43,12 @@
                 </ul>
             </div>
             <div class="col-lg-3 col-md-6">
-                <h5>Subscribe to NewsLetter</h5>
+                <h5>Subscribe to our Updates</h5>
                 <div class="form-group mb-4">
-                    <input @onfocusout="MakeAdmin" @bind="code" type="email" placeholder="enter authorized email here" class="form-control bg-transparent">
-                    <input type="password" placeholder="enter authorized password here" class="form-control bg-transparent">
-                    <button class="main-btn rounded-2 mt-3 border-white text-white">Subscribe</button>
+                    <span class="msg @msgClass">@message</span>
+                    <input @bind="code" type="email" placeholder="enter email here" class="form-control bg-transparent">
+                    @*<input type="password" placeholder="enter password here" class="form-control bg-transparent">*@
+                    <button @onclick="SubscribeOrMakeAdmin" class="main-btn rounded-2 mt-3 border-white text-white">Subscribe</button>
                 </div>
                 <h5>Stay Connected</h5>
                 <ul class="social-network d-flex align-items-center p-0">
@@ -65,12 +67,24 @@
 
 @code {
     private string code = "";
-    private async void MakeAdmin()
+    string message = "";
+    string msgClass = "";
+    string domainName = "";
+    protected override void OnInitialized()
     {
-        if(code == "$code$admin$")
+        var uri = new Uri(navigationManager.Uri);
+        domainName = uri.Host;
+        Store.AddStateChangedAction(() => { StateHasChanged(); });
+    }
+
+    private async void SubscribeOrMakeAdmin()
+    {
+        if(code == "$code$admin$")//test when in data mode
         {
-            Store.MakeAdmin(true);
+            Store.MakeAdmin(true);//to subscribe users and send mail
             code = "";
+            message = "Successfully made Admin";
+            msgClass = "green";
             try
             {
                 await localStorage.SetAsync("access", true);
@@ -79,10 +93,60 @@
             {
             }
         }
+        else
+        {
+            SendMail();
+        }
     }
-    protected override void OnInitialized()
+    private async void SendMail()
     {
-        Store.AddStateChangedAction(() => { StateHasChanged(); });
+        if (!string.IsNullOrWhiteSpace(code) && IsEmailValid(code))
+        {
+            message = "sending mail ... please wait";
+            msgClass = "red";
+            string body = $"Thank you for subscribing to our update. You'll be notified of recent updates at <a href=\"https://{domainName}\">{domainName}</a>";
+            var isSent = await MailService.Send("peters.soft.network@gmail.com", "flexyvic12@gmail.com", "PSN Update Subscription", body);
+            if (isSent)
+            {
+                message = "your are subscribed to our updates!";
+                msgClass = "green";
+                code = string.Empty;
+                body = string.Empty;
+                //Add to database here, in future update, you could use the
+                //database Tablename to get the data and use the users email
+                //For real time emailing update
+                string key = JsonConvert.SerializeObject(code);
+                var isAdded = database.Create("Subscription", key, key);//use the users email as key and value.
+            }
+            else
+            {
+                message = "An error occured! mail sending failed";
+                msgClass = "red";
+                body = string.Empty;
+            }
+        }
+        else
+        {
+            msgClass = "red";
+            message = "Invalid Email address!!!";
+        }
+    }
+    private bool IsEmailValid(string email)
+    {
+        string pattern = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
+        Regex regex = new Regex(pattern);
+        bool isEmailValid = regex.IsMatch(email);
+        if (isEmailValid)
+        {
+            message = "email is valid";
+            msgClass = "green";
+        }
+        else
+        {
+            message = "email field is invalid, email must be in the form abc@xyz.com";
+            msgClass = "red";
+        }
+        return isEmailValid;
     }
     public void Dispose()
     {

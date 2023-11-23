@@ -17,7 +17,7 @@
     --text-black: #000;
     --text-gray: #e4e4e4;
 }
-.dot{
+.dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
@@ -1004,8 +1004,9 @@ textarea {
     margin-bottom: 0.5rem;
 }
 .footer-wrapper .contact-info ul li a{
-    color: var(--secondary-color);
+    color: white;
     line-height: 0.5rem;
+    font-style:italic;
 }
 .footer-wrapper .link-widget li a, .footer-wrapper p{
     color: var(--text-gray);
